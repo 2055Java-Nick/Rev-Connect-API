@@ -19,9 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-
-
-
 @RestController
 @RequestMapping("/posts")
 public class PostController {
@@ -36,30 +33,31 @@ public class PostController {
 
     @PostMapping()
     public ResponseEntity<PostResponseDTO> createPost(@RequestBody PostRequestDTO postRequestDTO) {
-       PostResponseDTO createdPost = postService.savePost(postRequestDTO);
-       return new ResponseEntity<>(createdPost, HttpStatus.CREATED); 
+        PostResponseDTO createdPost = postService.savePost(postRequestDTO);
+        return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
     }
 
-    // Could not get ModelAttribute working, so I used this solution which is not the best
+    // Could not get ModelAttribute working, so I used this solution which is not
+    // the best
     // @PostMapping()
     // public ResponseEntity<Post> CreatePost(@RequestParam("title") String title,
-    //                                        @RequestParam("content") String content,
-    //                                        @RequestParam(value = "file", required = false) MultipartFile file) {
-    //     SecurityContext context = SecurityContextHolder.getContext();
-    //     Authentication auth = context.getAuthentication();
-    //     Principal principal = (Principal) auth.getPrincipal();
+    // @RequestParam("content") String content,
+    // @RequestParam(value = "file", required = false) MultipartFile file) {
+    // SecurityContext context = SecurityContextHolder.getContext();
+    // Authentication auth = context.getAuthentication();
+    // Principal principal = (Principal) auth.getPrincipal();
 
-    //     Post post = postService.postDtoToPost(new PostCreateRequest(title, content));
-    //     post.setUserId(new BigInteger(principal.getUserId().toString()));
-    //     post.setCreatedAt(timestampUtil.getCurrentTimestamp());
+    // Post post = postService.postDtoToPost(new PostCreateRequest(title, content));
+    // post.setUserId(new BigInteger(principal.getUserId().toString()));
+    // post.setCreatedAt(timestampUtil.getCurrentTimestamp());
 
-    //     Post response;
-    //     if(file != null) {
-    //         response = postService.savePost(post, file);
-    //     } else {
-    //         response = postService.savePost(post);
-    //     }
-    //     return ResponseEntity.ok(response);
+    // Post response;
+    // if(file != null) {
+    // response = postService.savePost(post, file);
+    // } else {
+    // response = postService.savePost(post);
+    // }
+    // return ResponseEntity.ok(response);
     // }
 
     @GetMapping("/{id}")
@@ -70,8 +68,8 @@ public class PostController {
 
     @GetMapping()
     public ResponseEntity<List<PostResponseDTO>> getAllPosts() {
-       List<PostResponseDTO> posts = postService.getAllPosts();
-       return new ResponseEntity<>(posts, HttpStatus.OK);
+        List<PostResponseDTO> posts = postService.getAllPosts();
+        return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
     @GetMapping("/recent")
@@ -82,18 +80,19 @@ public class PostController {
 
     @GetMapping("/author/{authorId}")
     public ResponseEntity<List<PostResponseDTO>> getPostsByAuthorId(@PathVariable Long authorId) {
-    List<PostResponseDTO> posts = postService.getPostsByAuthorId(authorId);
-    return new ResponseEntity<>(posts, HttpStatus.OK);
+        List<PostResponseDTO> posts = postService.getPostsByAuthorId(authorId);
+        return new ResponseEntity<>(posts, HttpStatus.OK);
     }
-    
+
     @GetMapping("/media/{postId}")
     public ResponseEntity<List<Media>> getMediaByPostId(@PathVariable Long postId) {
-        List<Media> mediaList =  mediaService.getMediaByPostId(postId);
+        List<Media> mediaList = mediaService.getMediaByPostId(postId);
         return new ResponseEntity<>(mediaList, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PostResponseDTO> updatePost(@RequestBody @Valid PostRequestDTO postRequestDTO, @PathVariable Long id) {
+    public ResponseEntity<PostResponseDTO> updatePost(@RequestBody @Valid PostRequestDTO postRequestDTO,
+            @PathVariable Long id) {
         PostResponseDTO updatedPost = postService.updatePost(id, postRequestDTO);
         return new ResponseEntity<>(updatedPost, HttpStatus.OK);
     }

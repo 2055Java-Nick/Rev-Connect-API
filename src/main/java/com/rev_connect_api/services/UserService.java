@@ -33,12 +33,12 @@ public class UserService {
     // find a user by username
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
 
     // find users by username or password
-    public List<User> getUserDetails(String userName,String email){
-         return userRepository.findByUsernameOrEmail(userName, email);
+    public List<User> getUserDetails(String userName, String email) {
+        return userRepository.findByUsernameOrEmail(userName, email);
     }
 
     public UserResponseDTO registerUser(UserRegistrationDTO userRegistrationDTO){
@@ -46,12 +46,13 @@ public class UserService {
         String emailId = userRegistrationDTO.getEmail();
         List<User> checkDuplicates = getUserDetails(username,emailId);
 
-        if(checkDuplicates.stream().anyMatch(userDetails->emailId.equals(userDetails.getEmail())))
+        if (checkDuplicates.stream().anyMatch(userDetails -> emailId.equals(userDetails.getEmail())))
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
 
-        if(checkDuplicates.stream().anyMatch(userDetails->username.equals(userDetails.getUsername())))
+        if (checkDuplicates.stream().anyMatch(userDetails -> username.equals(userDetails.getUsername())))
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already exists");
-        if(userRegistrationDTO.getRoles().isEmpty()) {
+
+      if(userRegistrationDTO.getRoles().isEmpty()) {
             userRegistrationDTO.setRoles((Set.of(Role.ROLE_USER)));
         }
 
@@ -66,19 +67,25 @@ public class UserService {
 
     public UserResponseDTO updateUser(Long id, UserUpdateDTO updateDTO) {
         User user = userRepository.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
-        if (updateDTO.getUsername() != null) user.setUsername(updateDTO.getUsername());
-        if (updateDTO.getEmail() != null) user.setEmail(updateDTO.getEmail());
-        if (updateDTO.getFirstName() != null) user.setFirstName(updateDTO.getFirstName());
-        if (updateDTO.getLastName() != null) user.setLastName(updateDTO.getLastName());
-        if (updateDTO.getIsBusiness() != null) user.setIsBusiness(updateDTO.getIsBusiness());
+        if (updateDTO.getUsername() != null)
+            user.setUsername(updateDTO.getUsername());
+        if (updateDTO.getEmail() != null)
+            user.setEmail(updateDTO.getEmail());
+        if (updateDTO.getFirstName() != null)
+            user.setFirstName(updateDTO.getFirstName());
+        if (updateDTO.getLastName() != null)
+            user.setLastName(updateDTO.getLastName());
+        if (updateDTO.getIsBusiness() != null)
+            user.setIsBusiness(updateDTO.getIsBusiness());
         if (updateDTO.getPassword() != null) {
             // hash the new password before update
             String hashedPassword = passwordEncoder.encode(updateDTO.getPassword());
             user.setPassword(hashedPassword);
         }
-        if(updateDTO.getRoles() != null) user.setRoles(mapRoles(updateDTO.getRoles()));
+        if (updateDTO.getRoles() != null)
+            user.setRoles(mapRoles(updateDTO.getRoles()));
 
         User updatedUser =  userRepository.saveAndFlush(user);
         return userMapper.toDTO(updatedUser);
