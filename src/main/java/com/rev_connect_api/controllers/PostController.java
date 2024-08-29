@@ -1,31 +1,31 @@
 package com.rev_connect_api.controllers;
 
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import com.rev_connect_api.models.Post;
+import com.rev_connect_api.security.Principal;
+import com.rev_connect_api.services.PostService;
+
 import com.rev_connect_api.dto.PostRequestDTO;
 import com.rev_connect_api.dto.PostResponseDTO;
 import com.rev_connect_api.models.Media;
-import com.rev_connect_api.models.Post;
 import com.rev_connect_api.services.MediaService;
-import com.rev_connect_api.services.PostService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
-
-
-
+/**
+ * Controller class that handles HTTP requests related to posts.
+ */
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/posts")
 public class PostController {
-
+  
     private final PostService postService;
     private final MediaService mediaService;
 
@@ -34,10 +34,25 @@ public class PostController {
         this.mediaService = mediaService;
     }
 
+    /**
+     * Retrieves the posts visible to the authenticated user.
+     * 
+     * @return ResponseEntity containing the posts that the user can see.
+     */
+    @GetMapping("/feed")
+    public ResponseEntity<List<Post>> retrieveFeed() {
+        try {
+            String currentUsername = ((Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+            return ResponseEntity.status(HttpStatus.OK).body(postService.GetFeedForUser(currentUsername));
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } 
+    }
+  
     @PostMapping()
     public ResponseEntity<PostResponseDTO> createPost(@RequestBody PostRequestDTO postRequestDTO) {
-       PostResponseDTO createdPost = postService.savePost(postRequestDTO);
-       return new ResponseEntity<>(createdPost, HttpStatus.CREATED); 
+         PostResponseDTO createdPost = postService.savePost(postRequestDTO);
+         return new ResponseEntity<>(createdPost, HttpStatus.CREATED); 
     }
 
     // Could not get ModelAttribute working, so I used this solution which is not the best

@@ -15,4 +15,7 @@ public class PostRequestDTO {
 
     @NotBlank(message = "Content is required")
     private String content;
+
+    @NotNull(message = "Post privacy setting is required")
+    private Boolean isPrivate;
 }

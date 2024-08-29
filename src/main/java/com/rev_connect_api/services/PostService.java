@@ -1,35 +1,65 @@
 package com.rev_connect_api.services;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.rev_connect_api.models.Post;
+import com.rev_connect_api.models.User;
+import com.rev_connect_api.repositories.PostRepository;
+import com.rev_connect_api.repositories.UserRepository;
+
 import com.rev_connect_api.dto.PostRequestDTO;
 import com.rev_connect_api.dto.PostResponseDTO;
 import com.rev_connect_api.mapper.PostMapper;
-import com.rev_connect_api.models.Post;
-import com.rev_connect_api.repositories.PostRepository;
-import com.rev_connect_api.utils.TimestampUtil;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
+/**
+ * Service class that provides operations for retrieving posts.
+ */
 @Service
 public class PostService {
-
-    private static final int MAX_POST_PER_PAGE = 5;
-
-    private final PostRepository postRepository;
+    private PostRepository postRepository;
+    private UserRepository userRepository;
     private final MediaService mediaService;
     private final PostMapper postMapper;
+    private ConnectionService connectionService;
     
-    public PostService(PostRepository postRepository, MediaService mediaService, PostMapper postMapper) {
+    private static final int MAX_POST_PER_PAGE = 5;
+    
+    /**
+     * Constructs a post service with necessary dependencies injected.
+     */
+    @Autowired
+    public PostService(PostRepository postRepository, UserRepository userRepository, ConnectionService connectionService, MediaService mediaService, PostMapper postMapper) {
         this.postRepository = postRepository;
+        this.userRepository = userRepository;
+        this.connectionService = connectionService;
         this.mediaService = mediaService;
         this.postMapper = postMapper;
+    }
+
+    /**
+     * Returns a list of posts that are visible to the authenticated user: public posts
+     * from any account and private posts from connected accounts.
+     * 
+     * @param authenticatedUsername the username of the user who is making the request.
+     * @return a list of visible posts.
+     */
+    public List<Post> GetFeedForUser(String authenticatedUsername) {
+      Optional<User> user = userRepository.findByUsername(authenticatedUsername);
+      Long id = user.isPresent() ? user.get().getUserId() : null;
+      List<Long> userConnections = connectionService.getConnectedUserIds(id);
+      return postRepository.findVisiblePosts(id, userConnections);
     }
 
     public PostResponseDTO getPostById(Long id) {

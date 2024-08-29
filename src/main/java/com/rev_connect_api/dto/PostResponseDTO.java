@@ -11,6 +11,7 @@ public class PostResponseDTO {
     private Long authorId;
     private String title;
     private String content; 
+    private Boolean isPrivate;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

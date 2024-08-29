@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rev_connect_api.controllers.PostController;
 import com.rev_connect_api.dto.PostRequestDTO;
 import com.rev_connect_api.dto.PostResponseDTO;
-import com.rev_connect_api.security.Principal;
 import com.rev_connect_api.services.MediaService;
 import com.rev_connect_api.services.PostService;
 
@@ -13,12 +12,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.Collections;
 import static org.mockito.ArgumentMatchers.any;
@@ -30,10 +26,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false) // Disable security filters if applicable
 public class PostControllerTest {
 
-    @Autowired
-    private PostController postController;
-    @Autowired
-    private MediaService mediaService;
+    //@Autowired
+    //private PostController postController;
+    //@Autowired
+    //private MediaService mediaService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -47,7 +43,7 @@ public class PostControllerTest {
     private PostRequestDTO postRequestDTO;
     private PostResponseDTO postResponseDTO;
 
-    private final static Long USER_ID = 1L;
+    //private final static Long USER_ID = 1L;
 
     @BeforeEach
     void setup() {
@@ -55,12 +51,14 @@ public class PostControllerTest {
         postRequestDTO.setAuthorId(1L);
         postRequestDTO.setTitle("Test Title");
         postRequestDTO.setContent("Test Content");
+        postRequestDTO.setIsPrivate(true);
 
         postResponseDTO = new PostResponseDTO();
         postResponseDTO.setPostId(1L);
         postResponseDTO.setAuthorId(1L);
         postResponseDTO.setTitle("Test Title");
         postResponseDTO.setContent("Test Content");
+        postResponseDTO.setIsPrivate(true);
 
         // Principal principal = new Principal(USER_ID, "user");
         // UsernamePasswordAuthenticationToken auth =
