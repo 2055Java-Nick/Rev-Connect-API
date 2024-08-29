@@ -69,6 +69,9 @@ public class User {
         this.roles = roles;
     }
 
+    @ManyToMany(mappedBy = "taggedUsers")
+    private Set<Post> taggedPosts = new HashSet<>();
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

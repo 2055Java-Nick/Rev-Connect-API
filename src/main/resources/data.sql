@@ -39,6 +39,28 @@ CREATE TABLE posts (
     FOREIGN KEY (author_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
+CREATE TABLE tags (
+    tag_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    tag_name VARCHAR(50) NOT NULL UNIQUE
+);
+
+CREATE TABLE post_tags (
+    post_id BIGINT NOT NULL,
+    tag_id BIGINT NOT NULL,
+    PRIMARY KEY (post_id, tag_id),
+    FOREIGN KEY (post_id) REFERENCES posts(post_id) ON DELETE CASCADE,
+    FOREIGN KEY (tag_id) REFERENCES tags(tag_id) ON DELETE CASCADE
+);
+
+CREATE TABLE post_tagged_users (
+    post_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL,
+    PRIMARY KEY (post_id, user_id),
+    FOREIGN KEY (post_id) REFERENCES posts(post_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
+
 -- Insert users
 -- passwords are hashed from "hashed_password"
 INSERT INTO users (username, user_password, email, first_name, last_name, is_business, created_at, updated_at)
