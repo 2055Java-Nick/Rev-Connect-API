@@ -52,7 +52,7 @@ public class NameAndBioTest {
 
     public NameAndBioTest() {
         //User prior to client request
-        initialUser = new User(1L,"user", "","", "Test", "User", false,LocalDateTime.now(),LocalDateTime.now(),Set.of(Role.ROLE_USER));
+        initialUser = new User(1L,"user", "","", "Test", "User", false,LocalDateTime.now(),LocalDateTime.now(),Set.of(Role.ROLE_USER),null,null,null);
         //Valid change to initialUser
         validUser = new User("user", "","", "John", "Doe", false);
         

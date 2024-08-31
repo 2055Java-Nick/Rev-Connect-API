@@ -1,10 +1,13 @@
-drop table if exists user_roles;
-drop table if exists users cascade;
-drop table if exists personal_profiles;
-drop table if exists posts cascade;
-drop table if exists tags cascade;
-drop table if exists post_tags cascade;
-drop table if exists tagged_users cascade;
+-- Drop existing tables if they exist
+DROP TABLE IF EXISTS user_roles;
+DROP TABLE IF EXISTS user_liked_posts;
+DROP TABLE IF EXISTS user_followed_hashtags;
+DROP TABLE IF EXISTS user_following;
+DROP TABLE IF EXISTS personal_profiles;
+DROP TABLE IF EXISTS posts CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS hashtags CASCADE;
+DROP TABLE IF EXISTS roles CASCADE;
 
 CREATE TABLE users (
     user_id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -63,6 +66,32 @@ CREATE TABLE tagged_users (
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
+-- Create user_liked_posts table
+CREATE TABLE user_liked_posts (
+    user_id BIGINT NOT NULL,
+    post_id BIGINT NOT NULL,
+    PRIMARY KEY (user_id, post_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (post_id) REFERENCES posts(post_id) ON DELETE CASCADE
+);
+
+-- Create user_followed_tags table
+CREATE TABLE user_followed_hashtags (
+    user_id BIGINT NOT NULL,
+    tag_id BIGINT NOT NULL,
+    PRIMARY KEY (user_id, tag_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (tag_id) REFERENCES tags(tag_id) ON DELETE CASCADE
+);
+
+-- Create user_following table
+CREATE TABLE user_following (
+    user_id BIGINT NOT NULL,
+    following_id BIGINT NOT NULL,
+    PRIMARY KEY (user_id, following_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (following_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
 
 -- Insert users
 -- passwords are hashed from "hashed_password"
