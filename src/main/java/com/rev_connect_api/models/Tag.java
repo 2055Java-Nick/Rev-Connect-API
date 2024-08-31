@@ -23,4 +23,50 @@ public class Tag {
 
     @Column(name = "tag_name", nullable = false, unique = true)
     private String tagName;
+
+    @ManyToMany(mappedBy = "followed_tags")
+    private Set<User> followedBy; // Users who follow this hashtag
+
+    @ManyToMany(mappedBy = "tags")
+    private Set<Post> posts; // Posts that are associated with this hashtag
+
+    // Getter for 'id'
+    public Long getId() {
+        return tagId;
+    }
+
+    // Setter for 'id'
+    public void setId(Long id) {
+        this.tagId = tagId;
+    }
+
+    // Getter for 'tag'
+    public String getTag() {
+        return tagName;
+    }
+
+    // Setter for 'tag'
+    public void setTag(String tag) {
+        this.tagName = tagName;
+    }
+
+    // Getter for 'followedBy'
+    public Set<User> getFollowedBy() {
+        return followedBy;
+    }
+
+    // Setter for 'followedBy'
+    public void setFollowedBy(Set<User> followedBy) {
+        this.followedBy = followedBy;
+    }
+
+    // Getter for 'posts'
+    public Set<Post> getPosts() {
+        return posts;
+    }
+
+    // Setter for 'posts'
+    public void setPosts(Set<Post> posts) {
+        this.posts = posts;
+    }
 }

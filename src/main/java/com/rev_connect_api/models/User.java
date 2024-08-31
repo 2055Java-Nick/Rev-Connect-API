@@ -1,5 +1,6 @@
 package com.rev_connect_api.models;
 
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
@@ -60,6 +61,54 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private Set<Role> roles = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "user_liked_posts",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "post_id")
+    )
+    private Set<Post> likedPosts; // Posts that the user has liked
+
+    @ManyToMany
+    @JoinTable(
+        name = "user_followed_tags",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<Tag> followedTags; // Hashtags that the user follows
+
+    @ManyToMany
+    @JoinTable(
+        name = "user_following",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "following_id")
+    )
+    private Set<User> following; // Users that the current user is following
+
+    public Set<Post> getLikedPosts() {
+        return likedPosts;
+    }
+
+    public void setLikedPosts(Set<Post> likedPosts) {
+        this.likedPosts = likedPosts;
+    }
+
+    public Set<Tag> getFollowedHashtags() {
+        return followedTags;
+    }
+
+    public void setFollowedHashtags(Set<Tag> followedTags) {
+        this.followedTags = followedTags;
+    }
+
+    public Set<User> getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(Set<User> following) {
+        this.following = following;
+    }
 
     public Set<Role> getRoles() {
         return roles;
