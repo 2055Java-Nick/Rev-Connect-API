@@ -61,6 +61,10 @@ public class User {
     @Column(name = "role", nullable = false)
     private Set<Role> roles = new HashSet<>();
 
+    @OneToOne
+    @JoinColumn(name = "profile_id", referencedColumnName = "id")
+    private Profile profile;
+
     public Set<Role> getRoles() {
         return roles;
     }
@@ -88,13 +92,14 @@ public class User {
     }
 
 
-    public User(String username, String password, String email, String firstName, String lastName, boolean isBusiness) {
+    public User(String username, String password, String email, String firstName, String lastName, boolean isBusiness, Profile profile) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.isBusiness = isBusiness;
+        this.profile = profile;
     }
 
     @Override
@@ -127,6 +132,8 @@ public class User {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", roles=" + roles +
+                ", profile=" + profile +
                 '}';
     }
+
 }
