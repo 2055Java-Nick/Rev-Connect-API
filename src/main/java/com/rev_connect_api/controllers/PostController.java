@@ -38,7 +38,8 @@ public class PostController {
 
     @PostMapping()
     public ResponseEntity<PostResponseDTO> createPost(@RequestBody PostRequestDTO postRequestDTO) {
-       PostResponseDTO createdPost = postService.savePost(postRequestDTO);
+        System.out.println(postRequestDTO.toString());
+        PostResponseDTO createdPost = postService.savePost(postRequestDTO);
        return new ResponseEntity<>(createdPost, HttpStatus.CREATED); 
     }
 
