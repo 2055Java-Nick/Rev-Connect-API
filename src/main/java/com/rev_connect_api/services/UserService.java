@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.config.Profiles;
 import org.springframework.data.util.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,18 +40,15 @@ public class UserService {
     private final EmailService emailService;
     private final SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private final long EXPIRE_TOKEN = 15; // Expiration time in minutes
-    private final PersonalProfileService personalProfileService;
-    private final BusinessProfileService businessProfileService;
-    private final UserMapper userMapper;
-  
+    private final ProfileService profileService;
+
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailService emailService, PersonalProfileService personalProfileService, BusinessProfileService businessProfileService, UserMapper userMapper) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailService emailService, ProfileService profileService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
-        this.userMapper = userMapper;
-        this.personalProfileService = personalProfileService;
-        this.businessProfileService = businessProfileService;
+        this.profileService = profileService;
+    }
 
     // Find a user by username
     public User findUserByUsername(String username) {
@@ -87,9 +85,14 @@ public class UserService {
         if (checkDuplicates.stream().anyMatch(userDetails -> username.equals(userDetails.getUsername())))
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already exists");
 
-        if(userRegistrationDTO.getRoles().isEmpty()) {
-            userRegistrationDTO.setRoles((Set.of(Role.ROLE_USER)));
         }
+
+        // Hash the password before saving
+        String hashedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(hashedPassword);
+
+        // Create initial profile
+        user.setProfile(profileService.createProfile(user.getIsBusiness()));
 
         // hashing password then persisting hashed password to the database
         String hashedPassword = passwordEncoder.encode(userRegistrationDTO.getPassword());
