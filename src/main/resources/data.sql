@@ -37,8 +37,10 @@ CREATE TABLE posts (
     author_id BIGINT NOT NULL,
     title VARCHAR(255) NOT NULL,
     content VARCHAR(255) NOT NULL,
+    is_pinned BOOLEAN,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    pinned_at TIMESTAMP,
     FOREIGN KEY (author_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
@@ -90,12 +92,12 @@ VALUES
 (4, 'TestBio4!');
 
 -- Insert posts
-INSERT INTO posts (author_id, title, content, created_at, updated_at)
+INSERT INTO posts (author_id, title, content,is_pinned, created_at, updated_at,pinned_at)
 VALUES
-(1, 'testtitle1', 'This is the first test post.', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(1, 'testtitle2', 'This is the second test post.', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(2, 'testtitle3', 'Another post for testing.', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(1, 'testtitle4', 'Yet another test post.', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+(1, 'testtitle1', 'This is the first test post.',false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,NULL),
+(1, 'testtitle2', 'This is the second test post.',false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,NULL),
+(2, 'testtitle3', 'Another post for testing.',false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,NULL),
+(1, 'testtitle4', 'Yet another test post.', false,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,NULL);
 
 INSERT INTO tags (tag_name)
 VALUES

@@ -18,7 +18,7 @@ public class PostRequestDTO {
     @NotBlank(message = "Content is required")
     private String content;
 
-    private Boolean isPinned;
+    private Boolean isPinned = false;
     private Set<String> tagNames; // List of tag names to be added to the post
 
     private Set<Long> taggedUserIds; // List of user IDs to be tagged to the post

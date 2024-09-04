@@ -34,7 +34,7 @@ public class Post {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "isPinned",nullable = false)
+    @Column(name = "is_pinned",nullable = false)
     private Boolean isPinned;
 
     @CreatedDate
@@ -45,7 +45,7 @@ public class Post {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    @LastModifiedDate
+    // @LastModifiedDate
     @Column(name = "pinned_at")
     private LocalDateTime pinnedAt;
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
