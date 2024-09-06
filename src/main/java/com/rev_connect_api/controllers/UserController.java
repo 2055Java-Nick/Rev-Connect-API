@@ -30,6 +30,7 @@ public class UserController {
     public ResponseEntity<UserResponseDTO> registerUser(@RequestBody @Valid UserRegistrationDTO registrationDTO) {
         // handle registrattion logic in UserService
         UserResponseDTO user = userService.registerUser(registrationDTO);
+        System.out.println(registrationDTO); // Log the DTO
         // TODO: send a verification email
         // emailService.sendVerficiationEmail(user);
 

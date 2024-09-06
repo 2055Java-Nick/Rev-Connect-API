@@ -29,7 +29,7 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/auth/login", "/users/register", "/h2-console/**", "/attachments/**").permitAll() // allow login and register to everyone
-                .requestMatchers("/users/**", "/posts/**", "/comments/**", "/likes/**", "/profile/?*").hasAnyRole("USER", "ADMIN") // USER or ADMIN roles can access /users/**
+                .requestMatchers("/users/**", "/posts/**", "/comments/**", "/likes/**", "/profile/?*", "/recommendations/follow/**").hasAnyRole("USER", "ADMIN") // USER or ADMIN roles can access /users/**
                 .anyRequest().authenticated()) // all other requests require authentication
                 .sessionManagement(session -> session
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

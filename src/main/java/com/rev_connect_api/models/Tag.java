@@ -24,7 +24,7 @@ public class Tag {
     @Column(name = "tag_name", nullable = false, unique = true)
     private String tagName;
 
-    @ManyToMany(mappedBy = "followed_tags")
+    @ManyToMany(mappedBy = "followedTags")
     private Set<User> followedBy; // Users who follow this hashtag
 
     @ManyToMany(mappedBy = "tags")

@@ -86,6 +86,7 @@ public class User {
     )
     private Set<User> following; // Users that the current user is following
 
+
     public Set<Post> getLikedPosts() {
         return likedPosts;
     }
@@ -117,6 +118,7 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
 
     @PrePersist
     protected void onCreate() {
@@ -178,4 +180,5 @@ public class User {
                 ", roles=" + roles +
                 '}';
     }
+
 }
